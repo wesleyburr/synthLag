@@ -45,34 +45,43 @@
     M <- length(coh$freq)
     egnC <- s2$mtm$eigenCoefs
     WbinUse <- floor(Wbin / 2)
-    
+
     #  cut to 1 / freq_cut seconds period, only consider bands above this
-    if(min(coh$freq[mask1]) < freq_cut) {
-      jMin <- max(which(coh$freq[mask1] < freq_cut ))
+    if(length(mask1) >= 1) {
+      if(min(coh$freq[mask1]) < freq_cut) {
+        jMin <- max(which(coh$freq[mask1] < freq_cut ))
+      } else {
+        jMin <- 0
+      }
     } else {
-      jMin <- 0 
+      jMin <- 0
     }
- 
+
     x2_zp <- c(x2, rep(0, nFFT - N))
     x2_pgrm <- fft(x2_zp)
 
-    for(j in (jMin + 1):length(mask1)) {
-      lowerB <- max(1, mask1[j] - WbinUse)
-      upperB <- min(M, mask1[j] + WbinUse)
-      rng <- lowerB:upperB
-      phases <- coh$ph[rng] %% 360
-      phases[phases > 179.9] <- phases[phases > 179.9] - 360
-      phases <- phases / 180 * pi  # need phases in radians for correction
-      offsetPh <- complex(real = cos(phases), imaginary = sin(phases))
+    if(length(mask1) >= jMin + 1) {
+      for(j in (jMin + 1):length(mask1)) {
+        lowerB <- max(1, mask1[j] - WbinUse)
+        upperB <- min(M, mask1[j] + WbinUse)
+        rng <- lowerB:upperB
+        phases <- coh$ph[rng] %% 360
+        phases[phases > 179.9] <- phases[phases > 179.9] - 360
+        phases <- phases / 180 * pi  # need phases in radians for correction
+        offsetPh <- complex(real = cos(phases), imaginary = sin(phases))
 
-      # start with x2, flip it into freq domain with regular periodogram,
-      # then apply this phase. Rinse-repeat over each of the adjustments. 
-      x2_pgrm[rng] <- x2_pgrm[rng] * offsetPh
+        # start with x2, flip it into freq domain with regular periodogram,
+        # then apply this phase. Rinse-repeat over each of the adjustments.
+        x2_pgrm[rng] <- x2_pgrm[rng] * offsetPh
+      }
+
+      # Now have phase-adjusted array, continue and invert to "new" series
+      x2_pgrm[(nFFT/2+2):nFFT] <- Conj(x2_pgrm[(nFFT/2):2])
+      flip_back <- Re(fft(x2_pgrm, inverse = TRUE))[1:N] / nFFT
+    } else {
+      # didn't find any coherent peaks to phase-align; just return x2
+      return(x2)
     }
-    # Now have phase-adjusted array, continue and invert to "new" series
-    x2_pgrm[(nFFT/2+2):nFFT] <- Conj(x2_pgrm[(nFFT/2):2])
-    flip_back <- Re(fft(x2_pgrm, inverse = TRUE))[1:N] / nFFT
-
     return(flip_back)
 }
 

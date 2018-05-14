@@ -1,5 +1,5 @@
 #
-#  Simulation 3
+#  Simulation 4
 #  * independent WN(0, \sigma^2) base
 #  * two periodic component
 #  * equal \omega terms
