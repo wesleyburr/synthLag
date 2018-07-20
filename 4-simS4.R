@@ -72,7 +72,7 @@ res2[4, ] <- quantile(lmods_syn - lmods3, probs = c(0.025, 0.50, 0.975))
 res2[5, ] <- c(NA, NA, NA)
 
 library("xtable")
-res1_x <- xtable(res1)
+res1_x <- xtable(res)
 res2_x <- xtable(res2)
 
 print(res1_x)
@@ -131,11 +131,11 @@ res2[3, ] <- quantile(lmods_syn - lmods2, probs = c(0.025, 0.50, 0.975))
 res2[4, ] <- quantile(lmods_syn - lmods3, probs = c(0.025, 0.50, 0.975))
 res2[5, ] <- c(NA, NA, NA)
 
-res1_x <- xtable(res1)
-res2_x <- xtable(res2)
+res3_x <- xtable(res)
+res4_x <- xtable(res2)
 
-print(res1_x)
-print(res2_x)
+print(res3_x)
+print(res4_x)
 
 #
 # change to 0.99
@@ -190,10 +190,10 @@ res2[3, ] <- quantile(lmods_syn - lmods2, probs = c(0.025, 0.50, 0.975))
 res2[4, ] <- quantile(lmods_syn - lmods3, probs = c(0.025, 0.50, 0.975))
 res2[5, ] <- c(NA, NA, NA)
 
-res1_x <- xtable(res1)
-res2_x <- xtable(res2)
+res5_x <- xtable(res)
+res6_x <- xtable(res2)
 
-print(res1_x)
-print(res2_x)
+print(res5_x)
+print(res6_x)
 
 

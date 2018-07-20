@@ -6,8 +6,8 @@ z <- qnorm(1-(1-0.95)/2)
 
 load("res_NMMAPS_dlnm.RDa")
 load("res_NMMAPS_synth.RDa")
-res_NMMAPS_synth <- models
-res_NMMAPS_synth <- res_NMMAPS_synth[, c("CD", "AP", "Estimate.quasi", "Std.Dev.quasi")]
+# res_NMMAPS_synth <- models
+# res_NMMAPS_synth <- res_NMMAPS_synth[, c("CD", "AP", "Estimate.quasi", "Std.Dev.quasi")]
 res_NMMAPS_synth <- exp(res_NMMAPS_synth)
 
 res_NMMAPS <- res_NMMAPS[row.names(res_NMMAPS) %in% row.names(res_NMMAPS_synth), ]
@@ -34,7 +34,8 @@ p <- ggplot(ggdat, aes(x = x, y = y, colour = Model)) +
      ylab("Relative Risk (Increase of 1 unit of Ozone)") +
      ylim(ymin = min(ggdat$low), max(ggdat$high)) 
 
-png("NMMAPS_dlnm_vs_synth.png", width = 1000, height = 500)
+#png("NMMAPS_dlnm_vs_synth.png", width = 1000, height = 500)
+pdf("NMMAPS_dlnm_vs_synth.pdf", width = 9, height = 5)
 par(mar = c(4, 4, 1, 1))
 plot(p)
 dev.off()
